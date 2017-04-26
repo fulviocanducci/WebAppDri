@@ -1,0 +1,58 @@
+﻿@model IEnumerable<WebAppDri.Models.Product>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Pesquisa de Produtos</h2>
+<form action="/pesquisa" method="post" onsubmit="return verificando();" class="form-inline">
+    <div class="form-group">
+        @Html.DropDownList("Kinds", null, string.Empty, new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+</form>
+<form action="/pesquisa/excluir" method="post" onsubmit="return verificando_escolhido();">
+    @if (Model != null)
+    {
+        <table class="table" style="margin-top:15px;">
+            <tr>
+                <th style="text-align:center">Id</th>
+                <th style="text-align:center">Descrição</th>
+                <th style="text-align:center">Tipo</th>
+                <th style="text-align:center">...</th>
+            </tr>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td style="width:10%;text-align:center">@p.Id</td>
+                    <td style="width:75%">@p.Description</td>
+                    <td style="width:10%;text-align:center">@p.Kind.Title</td>
+                    <td style="width:5%;text-align:center"><input type="checkbox" value="@p.Id" name="Ids" /></td>
+                </tr>
+            }
+        </table>
+        <div class="right text-right">
+            <button type="submit" class="btn btn-danger">Excluir</button>
+        </div>
+    }
+</form>
+@section scripts {
+    <script>
+        function verificando() {
+            if ($("#Kinds").val() != "") {
+                return true;
+            }
+            alert("Escolha o produto ...");
+            return false;
+        }
+
+        function verificando_escolhido() {            
+            if ($("input[name='Ids']:checked").length > 0)
+            {
+                return true;
+            }
+            alert("Escolha o produto para excluir ...");
+            return false;
+        }
+    </script>
+}
+
